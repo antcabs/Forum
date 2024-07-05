@@ -1,9 +1,9 @@
 <?php
-
+session_start();
 require('actions/database.php');
 
 if (isset($_POST['validate'])) {
-
+    //verif que l'user compléte tous les champs
     if(!empty($_POST['pseudo']) &&!empty($_POST['password'])) {
  
        $user_pseudo = htmlspecialchars($_POST['pseudo']);
@@ -11,7 +11,7 @@ if (isset($_POST['validate'])) {
        
        $checkIfUserExists = $bdd->prepare('SELECT * FROM users WHERE pseudo =? ');
        $checkIfUserExists->execute(array($user_pseudo));
-
+        //insertion de l'utilisateur dans la base de donnée
         if($checkIfUserExists->rowCount() > 0) {
 
             $usersInfos = $checkIfUserExists->fetch();
@@ -22,7 +22,7 @@ if (isset($_POST['validate'])) {
                 $_SESSION['lastname'] = $usersInfos['nom'];
                 $_SESSION['firstname'] = $usersInfos['prenom'];
                 $_SESSION['pseudo'] = $usersInfos['pseudo'];
-
+                //redirection vers la page d'accueil
                 header('location: index.php');
 
             }else{
